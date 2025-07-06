@@ -44,6 +44,11 @@ public:
     inline static glm::vec2 waveDirectionC = glm::normalize(glm::vec2(1.0f, 1.3f));
     inline static float waveSteepnessC = 0.25f;
     inline static float waveLengthC = 1.8f;
+
+    // Wave shader
+    inline static glm::vec3 waterDeepColor = glm::vec3(0.0f, 0.1f, 0.3f);
+    inline static glm::vec3 waterShallowColor = glm::vec3(0.3f, 0.7f, 1.0f);
+    inline static float ambientStrength = 0.2f;
 };
 
 #endif // SETTINGS_H

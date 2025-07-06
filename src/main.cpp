@@ -27,9 +27,9 @@ void updateShaderUniforms(Shader& shader, float currentTime, const glm::mat4& mo
     shader.setMat4("u_projection", projection);
     shader.setFloat("u_time", currentTime);
     shader.setVec3("u_cameraPosition", Camera::Get().position);
-    shader.setVec3("u_deepColor", glm::vec3(0.0f, 0.1f, 0.3f));
-    shader.setVec3("u_shallowColor", glm::vec3(0.3f, 0.7f, 1.0f));
-    shader.setFloat("u_ambientStrength", 0.2f);
+    shader.setVec3("u_deepColor", Settings::waterDeepColor);
+    shader.setVec3("u_shallowColor", Settings::waterShallowColor);
+    shader.setFloat("u_ambientStrength", Settings::ambientStrength);
 
     // Wave uniforms
     shader.setVec4("u_waveA", glm::vec4(

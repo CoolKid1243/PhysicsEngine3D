@@ -79,7 +79,9 @@ void Interface() {
                     ImGui::EndTabItem();
                 }
                 if (ImGui::BeginTabItem("Rendering")) {
-                    ImGui::Text("Rendering settings go here.");
+                    ImGui::ColorEdit3("Shallow Color", (float*)&Settings::waterShallowColor);
+                    ImGui::ColorEdit3("Deep Color", (float*)&Settings::waterDeepColor);
+                    ImGui::SliderFloat("Ambient Strength", &Settings::ambientStrength, 0.0f, 1.0f);
                     ImGui::EndTabItem();
                 }
 

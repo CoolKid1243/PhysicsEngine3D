@@ -9,17 +9,16 @@ out vec4 FragColor;
 
 // Uniforms
 uniform vec3 u_cameraPosition;
+uniform vec3 u_deepColor;
+uniform vec3 u_shallowColor;
+uniform float u_ambientStrength;
 
-// Brighter water colors
+// Water colors
 const vec3 deepWaterColor = vec3(0.0, 0.1, 0.3);
 const vec3 shallowWaterColor = vec3(0.3, 0.7, 1.0);
 
-// Simple light
 const vec3 lightDir = normalize(vec3(0.5, 1.0, 0.2));
 const vec3 lightColor = vec3(1.0, 0.95, 0.9);
-
-// Ambient light amount
-const float ambientStrength = 0.2;
 
 void main() {
     vec3 N = normalize(fragNormal); // Surface normal
@@ -33,10 +32,10 @@ void main() {
 
     // Base color depending on angle of surface
     float facingUp = clamp(N.z, 0.0, 1.0);
-    vec3 waterColor = mix(deepWaterColor, shallowWaterColor, facingUp);
+    vec3 waterColor = mix(u_deepColor, u_shallowColor, facingUp);
 
     // Add ambient, diffuse, and specular + fresnel reflection
-    vec3 lighting = waterColor * (ambientStrength + diffuse) + lightColor * spec * fresnel;
+    vec3 lighting = waterColor * (u_ambientStrength + diffuse) + lightColor * spec * fresnel;
 
     FragColor = vec4(lighting, 1.0);
 }
