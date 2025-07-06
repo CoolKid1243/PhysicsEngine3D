@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Build
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+*.o
+*.obj
+*.exe
+*.out
+
+# Conan
+conanbuild*
+conanrun*
+*.cmake
+
+# VSCode
+.vscode/
+.cache/
