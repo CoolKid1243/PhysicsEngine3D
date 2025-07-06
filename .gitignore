@@ -1,12 +1,23 @@
-# macOS
+# macOS system file
 .DS_Store
 
-# Build
+# Build directories
 /build/
-/CMakeFiles/
-/CMakeCache.txt
+/.cache/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeUserPresets.json
+cmake_install.cmake
+Makefile
+
+# Compiled object files
 *.o
 *.obj
+*.so
+*.a
+*.dll
 *.exe
 *.out
 
@@ -15,6 +26,5 @@ conanbuild*
 conanrun*
 *.cmake
 
-# VSCode
+# VSCode settings (optional)
 .vscode/
-.cache/
