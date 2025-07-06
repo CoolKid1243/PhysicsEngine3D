@@ -1,0 +1,5 @@
+#include "../../src/camera/camera.h"
+#include "../../src/file_manager/file_manager.h"
+#include "../../src/imgui/imgui_window.h"
+#include "../../src/shader/shader.h"
+#include "../../src/input/input.h"

@@ -1,0 +1,1 @@
+. "/Users/luccathiessen/Documents/Programming/C++/PhysicsEngine3D/build/deactivate_conanrunenv-debug-armv8.sh"
