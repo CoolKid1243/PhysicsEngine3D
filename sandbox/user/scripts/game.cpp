@@ -92,7 +92,7 @@ void updateWaterShaderUniforms(Shader& shader, float time, const glm::mat4& mode
     waterShader.setVec4("u_waveC", glm::vec4(settings::waveDirectionC, settings::waveSteepnessC, settings::waveLengthC));
 }
 
-static void WaterInit() {
+void EngineGame::Init() {
     // Generate the plane
     createPlane(vao, vbo, ebo);
 
@@ -110,7 +110,7 @@ static void WaterInit() {
     lastScale = settings::planeScale;
 }
 
-static void WaterUpdate(float deltaTime) {
+void EngineGame::Update(float deltaTime) {
     // Regenerate the plane mesh if settings changed
     if (settings::planeSubdivisions != lastSubdivisions || settings::planeScale != lastScale) {
         glDeleteVertexArrays(1, &vao);
@@ -123,7 +123,7 @@ static void WaterUpdate(float deltaTime) {
     }
 }
 
-static void WaterRender() {
+void EngineGame::Render() {
     waterShader.use();
 
     // Get window size for aspect ratio

@@ -80,7 +80,7 @@ int main() {
         // Clear screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.0f, 0.1f, 0.2f, 1.0f); // background
-        
+
         // Run update and render logic
         engine.Update(deltaTime);
         engine.Render();
