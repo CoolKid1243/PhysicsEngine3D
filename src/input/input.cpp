@@ -3,8 +3,8 @@
 #include "../camera/camera.h"
 
 static GLFWwindow* win = nullptr;
-static bool firstMouse = true; // For resetting the mouse offset when we first move the mouse
-static float lastX = 0.0f, lastY = 0.0f; // Last mouse positions
+static bool firstMouse = true;
+static float lastX = 0.0f, lastY = 0.0f;
 bool Input::keys[1024]; // Key state array
 
 Input::Input() {}
@@ -31,8 +31,23 @@ void Input::KeyCallback(GLFWwindow *window, int key, int scancode, int action, i
         engineSettings::editorMode = !engineSettings::editorMode;
 
         // Show or hide the mouse based on if we are in editor mode
-        if (engineSettings::editorMode)
+        if (engineSettings::editorMode) {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+        else {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            firstMouse = true;
+        }
+    }
+
+    // Control + I toggles editor mode
+    if (key == GLFW_KEY_I && action == GLFW_PRESS && (mods & GLFW_MOD_CONTROL)) {
+        engineSettings::editorMode = !engineSettings::editorMode;
+
+        // Show or hide the mouse based on if we are in editor mode
+        if (engineSettings::editorMode) {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
         else {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             firstMouse = true;
