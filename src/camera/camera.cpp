@@ -1,5 +1,5 @@
 #include "camera.h"
-#include "../settings.h"
+#include "../engine_settings.h"
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/constants.hpp>
@@ -29,11 +29,11 @@ void Camera::Rotate(float xOffset, float yOffset) {
 
 void Camera::Move(bool* keys, float deltaTime, bool isSprinting) {
     // Pick the max speed based of if we are sprinting or base movement speed
-    float targetSpeed = isSprinting ? Settings::maxCameraSpeed : Settings::cameraMovementSpeed;
+    float targetSpeed = isSprinting ? engineSettings::maxCameraSpeed : engineSettings::cameraMovementSpeed;
 
     // Slowly speed up the camera till it's at it's target speed
     if (speedMultiplier < targetSpeed) {
-        speedMultiplier += Settings::cameraAcceleration * deltaTime;
+        speedMultiplier += engineSettings::cameraAcceleration * deltaTime;
     } else {
         speedMultiplier = targetSpeed;
     }

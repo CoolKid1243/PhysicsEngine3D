@@ -1,5 +1,5 @@
 #include "input.h"
-#include "../settings.h"
+#include "../engine_settings.h"
 #include "../camera/camera.h"
 
 static GLFWwindow* win = nullptr;
@@ -28,10 +28,10 @@ void Input::KeyCallback(GLFWwindow *window, int key, int scancode, int action, i
 
     // Commmand + I toggles editor mode
     if (key == GLFW_KEY_I && action == GLFW_PRESS && (mods & GLFW_MOD_SUPER)) {
-        Settings::editorMode = !Settings::editorMode;
+        engineSettings::editorMode = !engineSettings::editorMode;
 
         // Show or hide the mouse based on if we are in editor mode
-        if (Settings::editorMode)
+        if (engineSettings::editorMode)
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         else {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -42,11 +42,11 @@ void Input::KeyCallback(GLFWwindow *window, int key, int scancode, int action, i
 
 void Input::MouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
     // Only allow us to rotate the camera if we are holding right-click
-    if (Settings::editorMode && button == GLFW_MOUSE_BUTTON_RIGHT) {
-        Settings::rightMouseHeld = (action == GLFW_PRESS);
+    if (engineSettings::editorMode && button == GLFW_MOUSE_BUTTON_RIGHT) {
+        engineSettings::rightMouseHeld = (action == GLFW_PRESS);
 
         // Reset the mouse movement
-        if (Settings::rightMouseHeld) {
+        if (engineSettings::rightMouseHeld) {
             firstMouse = true;
         }
     }
@@ -54,7 +54,7 @@ void Input::MouseButtonCallback(GLFWwindow *window, int button, int action, int 
 
 void Input::CursorPosCallback(GLFWwindow *window, double xpos, double ypos) {
     // Onlt rotate the camera if not in editor or if we are in editor holding right-click
-    if (!Settings::editorMode || (Settings::editorMode && Settings::rightMouseHeld)) {
+    if (!engineSettings::editorMode || (engineSettings::editorMode && engineSettings::rightMouseHeld)) {
         if (firstMouse) {
             lastX = (float)xpos;
             lastY = (float)ypos;
@@ -70,8 +70,8 @@ void Input::CursorPosCallback(GLFWwindow *window, double xpos, double ypos) {
         lastY = (float)ypos;
 
         // Rotate the camera times the mouse sensitivity
-        xoffset *= Settings::mouseSensitivity;
-        yoffset *= Settings::mouseSensitivity;
+        xoffset *= engineSettings::mouseSensitivity;
+        yoffset *= engineSettings::mouseSensitivity;
 
         // Rotate camera
         Camera::Get().Rotate(xoffset, yoffset);

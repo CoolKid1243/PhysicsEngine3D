@@ -3,3 +3,11 @@
 #include "../../src/imgui/imgui_window.h"
 #include "../../src/shader/shader.h"
 #include "../../src/input/input.h"
+#include "../../src/engine_settings.h"
+#include "game.h"
+#include <iostream>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <imgui.h>
+#include "../../src/extern/imgui_impl_glfw.h"
+#include "../../src/extern/imgui_impl_opengl3.h"

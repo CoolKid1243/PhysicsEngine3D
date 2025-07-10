@@ -7,17 +7,26 @@ find_package(glew REQUIRED)
 find_package(glm REQUIRED)
 find_package(imgui REQUIRED)
 
-# Add all .cpp files in the src directory and its subdirectories
-file(GLOB_RECURSE CPP_SOURCES src/*.cpp)
+# Engine sources
+file(GLOB_RECURSE ENGINE_SOURCES src/*.cpp)
+file(GLOB_RECURSE ENGINE_HEADERS src/*.h)
 
-# Add all .h files in the src directory and its subdirectories
-file(GLOB_RECURSE HEADER_FILES src/*.h)
+# User sources
+file(GLOB_RECURSE USER_SOURCES sandbox/user/scripts/*.cpp)
+file(GLOB_RECURSE USER_HEADERS sandbox/user/scripts/*.h)
 
-# Create the library target
-add_executable(${PROJECT_NAME} src/main.cpp ${CPP_SOURCES} ${HEADER_FILES})
+# Executable with main.cpp + all sources
+add_executable(${PROJECT_NAME}
+    src/main.cpp
+    ${ENGINE_SOURCES}
+    ${ENGINE_HEADERS}
+    ${USER_SOURCES}
+    ${USER_HEADERS}
+)
 
 # Copy shaders
 file(COPY src/shaders DESTINATION ${CMAKE_BINARY_DIR}/)
+file(COPY sandbox/user/shaders DESTINATION ${CMAKE_BINARY_DIR}/)
 
 # Link libraries to the target
 target_link_libraries(${PROJECT_NAME} glfw)
