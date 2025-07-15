@@ -15,11 +15,11 @@ void Interface() {
         if (ImGui::Begin("Settings", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
             if (ImGui::BeginTabBar("Settings")) {
                 if (ImGui::BeginTabItem("Display")) {
-                    ImGui::Text("Skybox Settings:");
                     ImGui::Checkbox("Wireframe", &engineSettings::wireFrame);
                     ImGui::EndTabItem();
                 }
                 if (ImGui::BeginTabItem("Rendering")) {
+                    ImGui::Text("Skybox Settings:");
                     ImGui::ColorEdit3("Background Color", (float*)&engineSettings::backgroundColor);
                     ImGui::EndTabItem();
                 }
