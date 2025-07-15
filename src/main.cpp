@@ -1,4 +1,19 @@
-#include "../sandbox/engine/engine.h"
+#include <glm/fwd.hpp>
+#include <iostream>
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <imgui.h>
+#include "extern/imgui_impl_glfw.h"
+#include "extern/imgui_impl_opengl3.h"
+
+#include "engine_settings.h"
+#include "input/input.h"
+#include "imgui/imgui_window.h"
+#include "../sandbox/engine/game.h"
 
 void errorCallback(int error, const char *description) {
     std::cerr << "GLFW Error " << error << ": " << description << std::endl;
@@ -79,7 +94,13 @@ int main() {
 
         // Clear screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.0f, 0.1f, 0.2f, 1.0f); // background
+        // Background color
+        glClearColor(
+            engineSettings::backgroundColor.r,
+            engineSettings::backgroundColor.g,
+            engineSettings::backgroundColor.b,
+            1.0f // alpha
+        );
 
         // Run update and render logic
         engine.Update(deltaTime);

@@ -1,6 +1,8 @@
 #ifndef ENGINE_SETTINGS_H
 #define ENGINE_SETTINGS_H
 
+#include <glm/glm.hpp>
+
 class engineSettings {
 public:
     // Variables
@@ -23,6 +25,9 @@ public:
     inline static float cameraMovementSpeed = 3.5f;
     inline static float cameraAcceleration = 6.5f;
     inline static float maxCameraSpeed = 10.0f;
+
+    // Rendering settings
+    inline static glm::vec3 backgroundColor = glm::vec3(0.0f, 0.1f, 0.2f);
 };
 
 #endif // ENGINE_SETTINGS_H
