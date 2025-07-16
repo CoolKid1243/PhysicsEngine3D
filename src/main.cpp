@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <imgui.h>
+#include "camera/camera.h"
 #include "extern/imgui_impl_glfw.h"
 #include "extern/imgui_impl_opengl3.h"
 
@@ -14,10 +15,58 @@
 #include "input/input.h"
 #include "imgui/imgui_window.h"
 #include "../sandbox/engine/game.h"
+#include "shader/shader.h"
+#include "file_manager/file_manager.h"
+#include "camera/camera.h"
 
 void errorCallback(int error, const char *description) {
     std::cerr << "GLFW Error " << error << ": " << description << std::endl;
 }
+
+float skyboxVertices[] = {
+    // positions          
+    -1.0f,  1.0f, -1.0f,
+    -1.0f, -1.0f, -1.0f,
+     1.0f, -1.0f, -1.0f,
+     1.0f, -1.0f, -1.0f,
+     1.0f,  1.0f, -1.0f,
+    -1.0f,  1.0f, -1.0f,
+
+    -1.0f, -1.0f,  1.0f,
+    -1.0f, -1.0f, -1.0f,
+    -1.0f,  1.0f, -1.0f,
+    -1.0f,  1.0f, -1.0f,
+    -1.0f,  1.0f,  1.0f,
+    -1.0f, -1.0f,  1.0f,
+
+     1.0f, -1.0f, -1.0f,
+     1.0f, -1.0f,  1.0f,
+     1.0f,  1.0f,  1.0f,
+     1.0f,  1.0f,  1.0f,
+     1.0f,  1.0f, -1.0f,
+     1.0f, -1.0f, -1.0f,
+
+    -1.0f, -1.0f,  1.0f,
+    -1.0f,  1.0f,  1.0f,
+     1.0f,  1.0f,  1.0f,
+     1.0f,  1.0f,  1.0f,
+     1.0f, -1.0f,  1.0f,
+    -1.0f, -1.0f,  1.0f,
+
+    -1.0f,  1.0f, -1.0f,
+     1.0f,  1.0f, -1.0f,
+     1.0f,  1.0f,  1.0f,
+     1.0f,  1.0f,  1.0f,
+    -1.0f,  1.0f,  1.0f,
+    -1.0f,  1.0f, -1.0f,
+
+    -1.0f, -1.0f, -1.0f,
+    -1.0f, -1.0f,  1.0f,
+     1.0f, -1.0f, -1.0f,
+     1.0f, -1.0f, -1.0f,
+    -1.0f, -1.0f,  1.0f,
+     1.0f, -1.0f,  1.0f
+};
 
 int main() {
     // Initialize GLFW
@@ -58,13 +107,31 @@ int main() {
         return -1;
     }
 
+    // Initialize shader
+    Shader skyboxShader;
+    skyboxShader.init(
+        FileManager::read("shaders/skybox.vs"),
+        FileManager::read("shaders/skybox.fs")
+    );
+
+    // Setup skybox VAO
+    GLuint skyboxVAO, skyboxVBO;
+    glGenVertexArrays(1, &skyboxVAO);
+    glGenBuffers(1, &skyboxVBO);
+    glBindVertexArray(skyboxVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glBindVertexArray(0);
+
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
 
     // Enable backface culling
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    glFrontFace(GL_CCW);    
+    glFrontFace(GL_CCW);
 
     // Initialize ImGui
     IMGUI_CHECKVERSION();
@@ -93,14 +160,39 @@ int main() {
         glPolygonMode(GL_FRONT_AND_BACK, engineSettings::wireFrame ? GL_LINE : GL_FILL);
 
         // Clear screen
+        glClearColor(engineSettings::backgroundColor.r, engineSettings::backgroundColor.g, engineSettings::backgroundColor.b, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // Background color
-        glClearColor(
-            engineSettings::backgroundColor.r,
-            engineSettings::backgroundColor.g,
-            engineSettings::backgroundColor.b,
-            1.0f // alpha
+
+        // Render skybox
+        glDepthFunc(GL_LEQUAL);
+        glDepthMask(GL_FALSE);
+
+        skyboxShader.use();
+        skyboxShader.setVec3("u_sunDirection", engineSettings::sunDirection);
+        skyboxShader.setVec3("u_sunColor", engineSettings::sunColor);
+        skyboxShader.setFloat("u_timeOfDay", engineSettings::timeOfDay);
+
+        glm::mat4 view = Camera::Get().GetViewMatrix();
+        view[3][0] = 0.0f;
+        view[3][1] = 0.0f;
+        view[3][2] = 0.0f;
+
+        glm::mat4 projection = glm::perspective(
+            glm::radians(engineSettings::fov),
+            (float)engineSettings::windowWidth / engineSettings::windowHeight,
+            engineSettings::nearClip,
+            engineSettings::farClip
         );
+
+        skyboxShader.setMat4("u_view", view);
+        skyboxShader.setMat4("u_projection", projection);
+
+        glBindVertexArray(skyboxVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+
+        glDepthMask(GL_TRUE);
+        glDepthFunc(GL_LESS);
 
         // Run update and render logic
         engine.Update(deltaTime);
@@ -118,7 +210,6 @@ int main() {
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         }
 
-        // Present frame
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

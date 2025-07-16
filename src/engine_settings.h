@@ -28,6 +28,11 @@ public:
 
     // Rendering settings
     inline static glm::vec3 backgroundColor = glm::vec3(0.0f, 0.1f, 0.2f);
+
+    // Skybox settings
+    inline static glm::vec3 sunDirection = glm::normalize(glm::vec3(-0.2f, 0.7f, 0.3f));
+    inline static glm::vec3 sunColor = glm::vec3(1.0f, 0.9f, 0.6f);
+    inline static float timeOfDay = 0.5f;
 };
 
 #endif // ENGINE_SETTINGS_H

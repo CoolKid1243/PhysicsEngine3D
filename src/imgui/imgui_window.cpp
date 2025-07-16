@@ -21,6 +21,10 @@ void Interface() {
                 if (ImGui::BeginTabItem("Rendering")) {
                     ImGui::Text("Skybox Settings:");
                     ImGui::ColorEdit3("Background Color", (float*)&engineSettings::backgroundColor);
+                    ImGui::SliderFloat3("Sun Direction", (float*)&engineSettings::sunDirection, -1.0f, 1.0f);
+                    ImGui::ColorEdit3("Sun Color", (float*)&engineSettings::sunColor);
+                    ImGui::SliderFloat("Time of Day", &engineSettings::timeOfDay, 0.0f, 1.0f);
+
                     ImGui::EndTabItem();
                 }
                 if (ImGui::BeginTabItem("Camera")) {
