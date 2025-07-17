@@ -167,16 +167,13 @@ int main() {
         glDepthFunc(GL_LEQUAL);
         glDepthMask(GL_FALSE);
 
-        skyboxShader.use();
-        skyboxShader.setVec3("u_sunDirection", engineSettings::sunDirection);
-        skyboxShader.setVec3("u_sunColor", engineSettings::sunColor);
-        skyboxShader.setFloat("u_timeOfDay", engineSettings::timeOfDay);
-
+        // Setup view
         glm::mat4 view = Camera::Get().GetViewMatrix();
         view[3][0] = 0.0f;
         view[3][1] = 0.0f;
         view[3][2] = 0.0f;
 
+        // Setup projection
         glm::mat4 projection = glm::perspective(
             glm::radians(engineSettings::fov),
             (float)engineSettings::windowWidth / engineSettings::windowHeight,
@@ -184,6 +181,10 @@ int main() {
             engineSettings::farClip
         );
 
+        skyboxShader.use();
+        skyboxShader.setVec3("u_sunDirection", engineSettings::sunDirection);
+        skyboxShader.setVec3("u_sunColor", engineSettings::sunColor);
+        skyboxShader.setFloat("u_timeOfDay", engineSettings::timeOfDay);
         skyboxShader.setMat4("u_view", view);
         skyboxShader.setMat4("u_projection", projection);
 

@@ -44,10 +44,10 @@ float starField(vec3 dir) {
 }
 
 vec3 getSkyGradient(float y) {
-    vec3 nightColor  = vec3(0.10, 0.12, 0.15);
-    vec3 dawnColor   = vec3(0.80, 0.30, 0.10);
-    vec3 dayColor    = vec3(0.40, 0.70, 1.00);
-    vec3 sunsetColor = vec3(1.00, 0.40, 0.10);
+    vec3 nightColor = vec3(0.15, 0.05, 0.25);
+    vec3 dawnColor = vec3(0.7, 0.25, 0.4);
+    vec3 dayColor = vec3(0.35, 0.60, 0.95);
+    vec3 sunsetColor = vec3(0.9, 0.25, 0.6);
 
     y += 0.1;
     y = clamp(y, -1.0, 1.0);
